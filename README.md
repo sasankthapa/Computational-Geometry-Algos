@@ -1,46 +1,87 @@
-# Getting Started with Create React App
+# Motivation  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+As I am studying complex computational geometry algorithms (algorithms pertaining to 2d and 3d space), I wanted to visualize these algorithms and create an system that is scalable to different types of algorithms. This is a fruition of those ideas into a React app that uses instance of a classes to implement multiple algorithm.
 
-## Available Scripts
+## Implement your own algorithm
 
-In the project directory, you can run:
+1) Create an interface for your algorithm by extending the Base Algorithm class
+```
+export interface BaseAlgorithm{
+    name:string,
+    display:{
+        [key:string]:point|points
+    },
+    str:{
+        [key:string]:any
+    },
+}
 
-### `npm start`
+// for better type inference fill in values for display and str, look at /types/GrahamScan
+export interface IGrahamScan extends BaseAlgorithm{
+    display:{...
+    },
+    str:{...
+    }
+    steps:Array<Step<IGrahamScan>>;
+    getRender(instance:IGrahamScan):RenderData
+}
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Everything that is in the `display` object is either a `point` or `points` and gets proccessed to be drawn on the canvas. The `str` object stores the data structures required for running the algorithm.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Each element of `step` stores a function 'fn' that returns an object that tells us whether we need to go back steps (loops) or go forward (next:true) or even stay at the same line (next:false).
 
-### `npm test`
+```
+type stepReturn<T>={
+    next:boolean,
+    instance?:T,
+    step?:number
+}
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2) Extend your interface and create a class for your implementation
 
-### `npm run build`
+```
+export class GrahamScan implements IGrahamScan{
+}
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Write your algorithm in the steps array. This is where you have to get a bit creative and create logic to represent each step of the algorithm and update the instance at every step.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Example of a step object.
+```
+{
+    info:"find point with the lowest Y",
+    psuedo:'findLowestY()',
+    fn:(instance:IGrahamScan)=>{
+        if(!instance.display.points){
+            return {next:false}  
+        }
+        const lowest=findLowestYInArray(instance.display.points.data)
+        instance.display.lowest.data=lowest;
+        return {next:true,instance}
+    },
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3) Update BaseState and BaseProps in '/types/app.types.ts' to include your Interface class 
 
-### `npm run eject`
+In `App.tsx` import your class and create an instance.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+<AlgoApp instance={new GrahamScan()}/>
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4) Check 'src/lib/GrahamScan/' to see implementation of Graham Scan using utility functions.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+##### Note: To remove data from the display simply set the data to null
+###### Issue in mobiles: Line width in mobile phones don't get scaled correctly.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# How it works
 
-## Learn More
+Built on react three fiber, an amazing library that incorparates Threejs with React and simplifies the code we have to write.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+A Custom Canvas component is used with a Custom Camera which looks at the point
+The bulk of the renderering is done by  via the `PointRenderer`, `LineRenderer` and `PolyRenderer`. The point buffers are memoized to prevent unneccesary rendering.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### imp todo : implement easier way to instantiate different classes based on button click
