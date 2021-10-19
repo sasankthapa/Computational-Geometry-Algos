@@ -1,9 +1,9 @@
 import {Stack} from '../Utils';
 import { point, points, RenderData} from '../../../types/app.types'
-import { IGrahamScan, Step } from "../../../types/grahamscan.types";
-import { findLowestYInArray, sortBasedOnAngle, validatePoints } from "./GrahamScanUtils";
+import { IGrahamScan, IQuickHull, Step } from "../../../types/grahamscan.types";
+import { findLowestYInArray, sortBasedOnAngle, validatePoints } from "../GrahamScan/GrahamScanUtils";
 
-export class GrahamScan implements IGrahamScan{
+export class Quickhull implements IQuickHull{
     name='GrahamScan';
     str:IGrahamScan['str']={
         i:0,
@@ -13,7 +13,7 @@ export class GrahamScan implements IGrahamScan{
     instance=null;
     display={
         points:{type:'points',color:0xf0f0ff} as points,
-        hull:{type:'line',color:0x00ff00,size:1.5} as points,
+        hull:{type:'points',color:0x00ff00,size:1.5} as points,
         hull2:{type:'poly',color:0xff0000} as points,
         lowest:{type:'point',color:0x00ff00,size:1.3} as point,
         start:{type:'point',color:0xffff00,size:2} as point,
@@ -22,7 +22,7 @@ export class GrahamScan implements IGrahamScan{
         testingLine:{type:'line',color:0xff0000} as points,
     }
 
-    getRender(instance:IGrahamScan){
+    getRender(instance:IQuickHull){
         const toReturn:RenderData={pointData:[],pointsData:[],linesData:[],polyData:[]}
         for(const [_,v] of Object.entries(instance.display)){
             if(v.data){
@@ -40,7 +40,7 @@ export class GrahamScan implements IGrahamScan{
         return toReturn;
     }
 
-    steps:Array<Step<IGrahamScan>>=[
+    steps:Array<Step<IQuickHull>>=[
         {
             info:"Initialize data types",
             fn:()=>{
@@ -51,7 +51,7 @@ export class GrahamScan implements IGrahamScan{
         },{
             info:"find point with the lowest Y",
             psuedo:'findLowestY()',
-            fn:(instance:IGrahamScan)=>{
+            fn:(instance:IQuickHull)=>{
                 if(!instance.display.points){
                     return {next:false}  
                 }
@@ -62,7 +62,7 @@ export class GrahamScan implements IGrahamScan{
         },{
             info:"Sort array()",
             psuedo:'Sort Points w angle to lowest()',
-            fn:(instance:IGrahamScan)=>{
+            fn:(instance:IQuickHull)=>{
                 const sorted=sortBasedOnAngle(instance.display.lowest.data,instance.str.array)
                 console.log(instance.str.array.length)
                 console.log(sorted.length)
@@ -72,24 +72,20 @@ export class GrahamScan implements IGrahamScan{
         },{
             info:"--",
             psuedo:'Add first 3 points to stack',
-            fn:(instance:IGrahamScan)=>{
+            fn:(instance:IQuickHull)=>{
                 instance.str.stack.push(instance.display.lowest.data)
                 instance.str.stack.push(instance.str.array[1])
                 instance.str.stack.push(instance.str.array[2])
                 instance.display.start.data=instance.display.lowest.data;
                 instance.display.mid.data=instance.str.array[1];
                 instance.display.end.data=instance.str.array[2];
-                instance.display.testingLine.data=[]
-                instance.display.testingLine.data.push(instance.display.start.data)
-                instance.display.testingLine.data.push(instance.display.mid.data)
-                instance.display.testingLine.data.push(instance.display.end.data)
                 instance.str.i=2;
                 return {next:true,instance}
             },
         },{
             info:"",
             psuedo:'for i:3 to n:',
-            fn:(instance:IGrahamScan)=>{
+            fn:(instance:IQuickHull)=>{
             console.log(instance.display.hull2.data);
             console.log(instance.str.stack);
             instance.str.i+=1;
@@ -102,7 +98,7 @@ export class GrahamScan implements IGrahamScan{
         },{
             info:"",
             psuedo:'while PQxQR < 0 :\ntest if left or right turn',
-            fn:(instance:IGrahamScan)=>{
+            fn:(instance:IQuickHull)=>{
                 console.log('her')
                 if(instance.str.i >=instance.str.array.length){
                     return {next:true}
@@ -115,10 +111,6 @@ export class GrahamScan implements IGrahamScan{
                     instance.display.start.data=arr[0];
                     instance.display.mid.data=arr[1];
                     instance.display.end.data=instance.str.array[instance.str.i];
-                    instance.display.testingLine.data=[]
-                    instance.display.testingLine.data.push(arr[0])
-                    instance.display.testingLine.data.push(arr[1])
-                    instance.display.testingLine.data.push(instance.str.array[instance.str.i])
                     const hull=instance.str.stack.get();
                     instance.display.hull2.data=hull;
                     return {next:false,instance}
@@ -130,7 +122,7 @@ export class GrahamScan implements IGrahamScan{
         },{
             info:"",
             psuedo:'displayHull()',
-            fn:(instance:IGrahamScan)=>{
+            fn:(instance:IQuickHull)=>{
                 const hull=instance.str.stack.get();
                 instance.display.hull2.data=hull;
                 instance.display.hull2.data.push();
@@ -141,3 +133,4 @@ export class GrahamScan implements IGrahamScan{
         },
     ];
 }
+

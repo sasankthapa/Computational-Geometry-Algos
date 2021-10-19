@@ -1,5 +1,5 @@
 import React from 'react'
-import { AlgorithmDisplayProps } from '../../types/grahamscan.types'
+import { AlgorithmDisplayProps } from '../../types/app.types'
 
 const AlgorithmDisplay: React.FC<AlgorithmDisplayProps> = ({ pointsNum, setPointsNum,  render, steps, currStep, currPlaneSize, sparseRadius, setPlaneSize, setSparseRadius, step, play, pause }) => {
     console.log(currStep)

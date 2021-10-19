@@ -1,12 +1,11 @@
 import React  from "react";
 import AlgorithmDisplay from "./AlgorithmDisplay";
 import { genRandomPoints } from "../lib/Utils";
-import { BaseState,BaseProps } from "../../types/app.types";
-import { IGrahamScan } from "../../types/grahamscan.types";
+import { BaseProps, BaseState, IGrahamScan } from "../../types/grahamscan.types";
 import CustomCanvas from "./CustomCanvas";
 
-export default class App extends React.Component<BaseProps<IGrahamScan>,BaseState<IGrahamScan>>{
-    constructor(props:BaseProps<IGrahamScan>){
+export default class App extends React.Component<BaseProps,BaseState>{
+    constructor(props:BaseProps){
         super(props);
         this.state={
             play:false,

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AlgoApp from './components/GrahamScanApp';
-import { GrahamScan } from './lib/GrahamScan/GrahamScan';
+import { Quickhull } from './lib/QuickHull/Quickhull';
 
 function App() {
   return (
-    <AlgoApp instance={new GrahamScan()}/>
+    <AlgoApp instance={new Quickhull()}/>
   );
 }
 
