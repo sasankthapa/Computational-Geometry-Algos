@@ -6,20 +6,9 @@ import { findLowestYInArray, sortBasedOnAngle, validatePoints } from "../GrahamS
 export class Quickhull implements IQuickHull{
     name='GrahamScan';
     str:IGrahamScan['str']={
-        i:0,
-        array:[],
-        stack:new Stack<THREE.Vector2>()
     }
     instance=null;
     display={
-        points:{type:'points',color:0xf0f0ff} as points,
-        hull:{type:'points',color:0x00ff00,size:1.5} as points,
-        hull2:{type:'poly',color:0xff0000} as points,
-        lowest:{type:'point',color:0x00ff00,size:1.3} as point,
-        start:{type:'point',color:0xffff00,size:2} as point,
-        mid:{type:'point',color:0xff00f0,size:2} as point,
-        end:{type:'point',color:0xff000f,size:2}as point,
-        testingLine:{type:'line',color:0xff0000} as points,
     }
 
     getRender(instance:IQuickHull){

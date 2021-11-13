@@ -1,4 +1,4 @@
-import {BaseAlgorithm, BaseState, IStack, point, points, RenderData } from './app.types'
+import {BaseAlgorithm, BaseDisplay, BaseState, IStack, point, points, RenderData } from './app.types'
 
 type stepReturn<T>={
     next:boolean,
@@ -57,12 +57,12 @@ export interface BaseState{
     play:boolean,
     step:number,
     pointsNum:number,
-    instance:IGrahamScan|IQuickHull,
+    instance:BaseDisplay,
     sparseRadius:number,
     planeSize:number,
 }
 
 export interface BaseProps{
-    instance:IGrahamScan|IQuickHull,
+    instance:BaseDisplay,
 }
 

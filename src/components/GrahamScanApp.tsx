@@ -60,7 +60,6 @@ export default class App extends React.Component<BaseProps,BaseState>{
         const renderdata=this.state.instance.getRender(this.state.instance);
 
         return <div className="flex flex-col w-screen h-screen md:flex-row">
-            <CustomCanvas data={renderdata} planeArgs={[this.state.planeSize,this.state.planeSize,10,10]}/>
             <AlgorithmDisplay 
                 steps={this.state.instance.steps}
                 currStep={this.state.step} 

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {IStack} from '../../types/app.types';
+import {BaseAlgorithm, IStack} from '../../types/app.types';
 
 function getRandInt(min:number, max:number) {
     return Math.floor(Math.random() * (max - min) + min);

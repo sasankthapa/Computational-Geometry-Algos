@@ -40,8 +40,7 @@ export interface IStack<T>{
     get():Array<T>
 }
 
-export interface BaseAlgorithm{
-    name:string,
+export interface BaseDisplay{
     display:{
         [key:string]:point|points
     },

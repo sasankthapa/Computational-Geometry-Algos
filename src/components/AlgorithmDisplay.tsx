@@ -2,7 +2,6 @@ import React from 'react'
 import { AlgorithmDisplayProps } from '../../types/app.types'
 
 const AlgorithmDisplay: React.FC<AlgorithmDisplayProps> = ({ pointsNum, setPointsNum,  render, steps, currStep, currPlaneSize, sparseRadius, setPlaneSize, setSparseRadius, step, play, pause }) => {
-    console.log(currStep)
     return <div className="flex flex-col h-full p-2 text-white bg-blue-500 md:w-3/5">
         <div className="block transition-all group">
             <h1 className="font-bold group-hover:text-gray-900">Motivation</h1>

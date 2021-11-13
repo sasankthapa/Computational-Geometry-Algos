@@ -5,6 +5,7 @@
   "dependencies": {
     "@craco/craco": "^6.3.0",
     "@react-three/fiber": "^7.0.17",
+    "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -44,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/redux": "^3.6.0",
     "@types/three": "^0.133.1",
     "autoprefixer": "^9.8.8",
     "postcss": "^7.0.39",
